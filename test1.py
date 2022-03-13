@@ -1,56 +1,75 @@
-'''
-классы панелей флажков и переключателей для приложений, которые запрашивают
-информацию о состоянии позднее;
-передается список вариантов выбора, вызывается метод state(), работа
-с переменными выполняется автоматически
-'''
+"""
+AlGaAs/GaAs/AlGaAs
 
-from tkinter import *
+restart; n:=1; m:=0.067*9.1e-31; e:=1.6e-19; pi:=3.14; h:=1.06e-34;
+d:=12e-9;
 
+E:=proc(B,N,d);
+h*B*(N+0.5)/m+pi^2*h^2*n^2/(2*m*e*d^2);
+end proc:
 
-class Checkbar(Frame):
-    def __init__(self, parent=None, picks=[], side=LEFT, anchor=W):
-        Frame.__init__(self, parent)
+plot3d([E(B,0,d), E(B,1),E(B,2),E(B,3),E(B,4)],
+B=0..20,
+d=2..12,
+numpoints=100,
+linestyle=[1,1,1,1,1],
+thickness=2, color=[blue,red,green,black,pink]);
+"""
 
-        self.vars = []
-        for pick in picks:
-            var = IntVar()
-            chk = Checkbutton(self, text=pick, variable=var)
-            chk.pack(side=side, anchor=anchor, expand=YES)
-            self.vars.append(var)
-
-    def state(self):
-        return [var.get() for var in self.vars]
+import tkinter
+from math import pi
 
 
-class Radiobar(Frame):
-
-    def __init__(self, parent=None, picks=[], side=LEFT, anchor=W):
-        Frame.__init__(self, parent)
-
-        self.var = StringVar()
-        self.var.set(picks[0])
-        for pick in picks:
-            rad = Radiobutton(self, text=pick, value=pick, variable=self.var)
-            rad.pack(side=side, anchor=anchor, expand=YES)
-
-    def state(self):
-        return self.var.get()
+class DisabledEntry(tkinter.Entry):
+    def __init__(self, parent, text="", *args, **kwargs):
+        tkinter.Entry.__init__(self,parent, *args, **kwargs)
+        if type(text) != str(123): text = str(text)
+        self.insert(0, text)
+        self.config(state=tkinter.DISABLED)
 
 
-if __name__ == '__main__':
-    root = Tk()
-    lng = Checkbar(root, ['Python', 'C#', 'Java', 'C++'])
-    gui = Radiobar(root, ['win', 'x11', 'mac'], side=TOP, anchor=NW)
-    tgl = Checkbar(root, ['All'])
-    gui.pack(side=LEFT, fill=Y)
-    lng.pack(side=TOP, fill=X)
-    tgl.pack(side=LEFT)
-    lng.config(relief=GROOVE, bd=2)
-    gui.config(relief=RIDGE, bd=2)
 
-    def allstates():
-        print(gui.state(), lng.state(), tgl.state())
+class Calculator(tkinter.Frame):
+    def __init__(self, parent=None, **kwargs):
+        tkinter.Frame.__init__(self, parent, **kwargs)
 
-    Button(root, text='Peek', command=allstates).pack(side=RIGHT)
-    root.mainloop()
+        self.frame = tkinter.Frame(parent).pack(fill=tkinter.Y)
+
+        self.c = {              # CONSTANTS
+            'pi': tkinter.DoubleVar(value=pi),
+            'n' : tkinter.IntVar(value=1),
+            'm' : tkinter.DoubleVar(value=0.067*9.1*10**-31),
+            'e' : tkinter.DoubleVar(value=1.6*10**-19),
+            'h' : tkinter.DoubleVar(value=1.06*10**-34),
+            'd' : tkinter.DoubleVar(value=12*10**-9),
+        }
+        self.w = {              # WIDGETS
+        }
+
+    def func(self, B, N, d):
+        n, m, e, h, d = self.c['n'].get(), self.c['m'].get(), self.c['e'].get(), \
+                        self.c['h'].get(), self.c['d'].get()
+
+        ans = h * B * (N + 0.5) / m * pi**2 * \
+              h**2 * n**2 / (2*m * e * d**2)
+        return ans
+
+    def gui(self):
+
+        tkinter.Label(self.frame, text="CONSTANTS").pack(side=tkinter.TOP)
+        for key in self.c.keys():
+            frm = tkinter.Frame()
+            tkinter.Label(frm, text=key, width=3).pack(side=tkinter.LEFT)
+            DisabledEntry(frm, text=self.c[key].get()).pack(side=tkinter.RIGHT, fill=tkinter.X)
+            # tkinter.Entry(frm, textvariable=self.c[key]).pack(side=tkinter.RIGHT, fill=tkinter.X)
+            # self.w[key] = tkinter.Button(frm).pack(side=tkinter.RIGHT)
+            frm.pack(side=tkinter.TOP)
+
+        pass
+
+
+win = tkinter.Tk()
+calc = Calculator(win)
+print(calc.func(1, 2, 3))
+calc.gui()
+win.mainloop()
