@@ -20,30 +20,34 @@ import tkinter
 from math import pi
 
 
+
 class DisabledEntry(tkinter.Entry):
     def __init__(self, parent, text="", *args, **kwargs):
-        tkinter.Entry.__init__(self,parent, *args, **kwargs)
+        tkinter.Entry.__init__(self, parent, *args, **kwargs)
         if type(text) != str(123): text = str(text)
         self.insert(0, text)
         self.config(state=tkinter.DISABLED)
-
 
 
 class Calculator(tkinter.Frame):
     def __init__(self, parent=None, **kwargs):
         tkinter.Frame.__init__(self, parent, **kwargs)
 
-        self.frame = tkinter.Frame(parent).pack(fill=tkinter.Y)
+        self.frame = tkinter.Frame(parent).pack(fill=tkinter.BOTH)
 
         self.c = {              # CONSTANTS
             'pi': tkinter.DoubleVar(value=pi),
             'n' : tkinter.IntVar(value=1),
-            'm' : tkinter.DoubleVar(value=0.067*9.1*10**-31),
-            'e' : tkinter.DoubleVar(value=1.6*10**-19),
-            'h' : tkinter.DoubleVar(value=1.06*10**-34),
-            'd' : tkinter.DoubleVar(value=12*10**-9),
+            'm' : tkinter.DoubleVar(value=0.067*9.1e-31),
+            'e' : tkinter.DoubleVar(value=1.6e-19),
+            'h' : tkinter.DoubleVar(value=1.06e-34),
+            'd' : tkinter.DoubleVar(value=12e-9),
         }
-        self.w = {              # WIDGETS
+
+        self.v = {              # VARIABLES
+            'B' : tkinter.IntVar(value=1),
+            'N' : tkinter.IntVar(value=2),
+            'd' : tkinter.IntVar(value=3),
         }
 
     def func(self, B, N, d):
@@ -58,18 +62,25 @@ class Calculator(tkinter.Frame):
 
         tkinter.Label(self.frame, text="CONSTANTS").pack(side=tkinter.TOP)
         for key in self.c.keys():
-            frm = tkinter.Frame()
-            tkinter.Label(frm, text=key, width=3).pack(side=tkinter.LEFT)
+            frm = tkinter.Frame(self.frame)
+            tkinter.Label(frm, text=key, width=4).pack(side=tkinter.LEFT)
             DisabledEntry(frm, text=self.c[key].get()).pack(side=tkinter.RIGHT, fill=tkinter.X)
-            # tkinter.Entry(frm, textvariable=self.c[key]).pack(side=tkinter.RIGHT, fill=tkinter.X)
-            # self.w[key] = tkinter.Button(frm).pack(side=tkinter.RIGHT)
             frm.pack(side=tkinter.TOP)
 
+        tkinter.Label(self.frame, text="VARIABLES").pack(side=tkinter.TOP)
+        for key in self.v.keys():
+            frm = tkinter.Frame(self.frame)
+            tkinter.Label(frm, text=key, width=4).pack(side=tkinter.LEFT)
+            tkinter.Entry(frm, textvariable=self.v[key]).pack(side=tkinter.RIGHT, fill=tkinter.X)
+            frm.pack(side=tkinter.TOP)
         pass
 
 
-win = tkinter.Tk()
-calc = Calculator(win)
-print(calc.func(1, 2, 3))
-calc.gui()
-win.mainloop()
+if __name__ == '__main__':
+    win = tkinter.Tk()
+    calc = Calculator(win)
+    calc.gui()
+    calc.pack(side=tkinter.BOTTOM, padx=10, pady=10, ipadx=20)
+    print(calc.func(1, 2, 3))
+    tkinter.Label(win, text='asdasd').pack(side=tkinter.RIGHT)
+    win.mainloop()
