@@ -3,13 +3,13 @@ import tkinter
 import matplotlib.pyplot as plt
 
 win = tkinter.Tk()
-f = tkinter.Frame(win).pack(side=tkinter.LEFT)
+f = tkinter.Frame(win, bd=10, bg="red").pack(side=tkinter.LEFT)
 calc = Calculator(f)
 calc.gui()
 calc.pack(side=tkinter.LEFT, padx=10, pady=10, ipadx=20)
 print(calc.func(1, 2, 3))
 # f.pack(side=tkinter.LEFT)
-tkinter.Label(win, text='asdasd').pack(side=tkinter.TOP)
+tkinter.Label(win, text='asdasd').pack(side=tkinter.RIGHT)
 
 ################################################################
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg

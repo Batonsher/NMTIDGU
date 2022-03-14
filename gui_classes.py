@@ -32,7 +32,7 @@ class Calculator(tkinter.Frame):
     def __init__(self, parent=None, **kwargs):
         tkinter.Frame.__init__(self, parent, **kwargs)
 
-        self.frame = tkinter.Frame(parent).pack(side=tkinter.LEFT, fill=tkinter.BOTH)
+        self.frame = tkinter.Frame(parent, bg="green").pack(side=tkinter.LEFT)#, fill=tkinter.BOTH)
 
         self.c = {              # CONSTANTS
             'pi': tkinter.DoubleVar(value=pi),
