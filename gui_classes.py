@@ -20,7 +20,6 @@ import tkinter
 from math import pi
 
 
-
 class DisabledEntry(tkinter.Entry):
     def __init__(self, parent, text="", *args, **kwargs):
         tkinter.Entry.__init__(self, parent, *args, **kwargs)
@@ -33,22 +32,21 @@ class Calculator(tkinter.Frame):
     def __init__(self, parent=None, **kwargs):
         tkinter.Frame.__init__(self, parent, **kwargs)
 
-        self.frame = tkinter.Frame(parent).pack(fill=tkinter.BOTH)
+        self.frame = tkinter.Frame(parent).pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 
         self.c = {              # CONSTANTS
             'pi': tkinter.DoubleVar(value=pi),
-            'n' : tkinter.IntVar(value=1),
-            'm' : tkinter.DoubleVar(value=0.067*9.1e-31),
-            'e' : tkinter.DoubleVar(value=1.6e-19),
-            'h' : tkinter.DoubleVar(value=1.06e-34),
-            'd' : tkinter.DoubleVar(value=12e-9),
+            'n':  tkinter.IntVar(value=1),
+            'm':  tkinter.DoubleVar(value=0.067*9.1e-31),
+            'e':  tkinter.DoubleVar(value=1.6e-19),
+            'h':  tkinter.DoubleVar(value=1.06e-34),
+            'd':  tkinter.DoubleVar(value=12e-9),
         }
 
         self.v = {              # VARIABLES
-            'B' : tkinter.IntVar(value=1),
-            'N' : tkinter.IntVar(value=2),
-            'd' : tkinter.IntVar(value=3),
-        }
+            'B':  tkinter.IntVar(value=1),
+            'N':  tkinter.IntVar(value=2),
+            'd':  tkinter.IntVar(value=3), }
 
     def func(self, B, N, d):
         n, m, e, h, d = self.c['n'].get(), self.c['m'].get(), self.c['e'].get(), \
