@@ -1,0 +1,27 @@
+
+AlGaAs/GaAs/AlGaAs
+
+restart; n:=1; m:=0.067*9.1e-31; e:=1.6e-19; pi:=3.14; h:=1.06e-34;
+d:=12e-9;
+
+E:=proc(B,N,d);
+h*B*(N+0.5)/m+pi^2*h^2*n^2/(2*m*e*d^2);
+end proc:
+
+plot3d([E(B,0,d), E(B,1),E(B,2),E(B,3),E(B,4)],
+B=0..20,
+d=2..12,
+numpoints=100,
+linestyle=[1,1,1,1,1],
+thickness=2, color=[blue,red,green,black,pink]);
+
+<Output>
+
+NiM+SSJuRzYiIiIi
+NiM+SSJtRzYiJCIlKDQnISNO
+NiM+SSJlRzYiJCIjOyEjPw==NiM+SSNwaUc2IiQiJDkkISIj
+NiM+SSJoRzYiJCIkMSIhI08=LSUnUExPVDNERzYmLSUlR1JJREc2JTskIiIhRiokIiM/Rio7JCIiI0YqJCIjN0YqWCw2IkYzSSlhbnl0aGluZ0dJKnByb3RlY3RlZEdGNVtnb
+CchJSIhISNcYm0iOiI6M0MzQTJGOEI5QTIyNDZBOTNDMzFFRjQwNDI5QTVFMTAzQzJB
+MTg1OTgzNzQ4OUJFM0MyM0Q1M0RDRTFDRkQ3OTNDMUYyOUM1REZBMTYyRTkzQzE5MjB
+...
+NHNiVRIkJGM1EiZEYzUSFGMy0lLE9SSUVOVEFUSU9ORzYkJCEkSSkhIiIkIiNrRio=<

@@ -14,6 +14,7 @@ class DisabledEntry(tkinter.Entry):
         self.config(state=tkinter.DISABLED)
 
 
+
 class Calculator(tkinter.Frame):
     def __init__(self, parent=None, title='untitled', **kwargs):
         tkinter.Frame.__init__(self, parent, **kwargs)
