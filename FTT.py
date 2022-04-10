@@ -1,19 +1,5 @@
 """
-AlGaAs/GaAs/AlGaAs
-
-restart; n:=1; m:=0.067*9.1e-31; e:=1.6e-19; pi:=3.14; h:=1.06e-34;
-d:=12e-9;
-
-E:=proc(B,N,d);
-h*B*(N+0.5)/m+pi^2*h^2*n^2/(2*m*e*d^2);
-end proc:
-
-plot3d([E(B,0,d), E(B,1),E(B,2),E(B,3),E(B,4)],
-B=0..20,
-d=2..12,
-numpoints=100,
-linestyle=[1,1,1,1,1],
-thickness=2, color=[blue,red,green,black,pink]);
+FTT
 """
 
 import tkinter
@@ -43,35 +29,33 @@ class Calculator(tkinter.Frame):
 
         self.c = {              # CONSTANTS
             'n':  tkinter.IntVar(value=1),
-            'm':  tkinter.DoubleVar(value=6.097e-32),
+            'm':  tkinter.DoubleVar(value=9.1e-31),
             'e':  tkinter.DoubleVar(value=1.6e-19),
             'pi': tkinter.DoubleVar(value=pi),
             'h':  tkinter.DoubleVar(value=1.06e-34),
-            'd':  tkinter.DoubleVar(value=12e-9),
+            # 'd':  tkinter.DoubleVar(value=5e-9),
             # 'Eg': tkinter.DoubleVar(value=0.414),
         }
 
         self.v = {              # VARIABLES
-            'B':  (tkinter.IntVar(value=1), tkinter.IntVar(value=10), tkinter.IntVar(value=2)),
-            'N':  (tkinter.IntVar(value=0), tkinter.IntVar(value=4), tkinter.IntVar(value=1)),
+            'd':  (tkinter.DoubleVar(value=1e-9),
+                   tkinter.DoubleVar(value=1e-8),
+                   tkinter.IntVar(value=100)),
+            'Em':  (tkinter.DoubleVar(value=.0),
+                    tkinter.DoubleVar(value=0.004),
+                    tkinter.IntVar(value=4))
             }
         self.grid(row=0, column=0)
 
         self.gui()
         self.calc_button()
 
-    def func(self, B, N):
-        n, m, e, h, d = self.c['n'].get(), self.c['m'].get(), self.c['e'].get(), \
-                        self.c['h'].get(), self.c['d'].get()
+    def func(self, d, Em):
+        n, m, e, h = self.c['n'].get(), self.c['m'].get(), self.c['e'].get(), \
+                        self.c['h'].get()
 
-        ans = h * B * (N + .5) / m + (self.c['pi'].get() * h * n)**2 / (2 * m * e * d**2)
-
-
-        # ans = (N + .5) * h * B / m + \
-        #       (self.c['pi'].get() * h * n)**2 / (2 * m * e * d**2)
-        # ans = self.c['Eg'].get()**2 * 4 * self.c['Eg'].get() * ans
-        #
-        # ans = ans**.5 * .5 - self.c['Eg'].get() / 2
+        ans = Em + (pi * n * h)**2 / (2 * 1.08 * m * e * d**2)
+        # print(f"{ans:2.2f}")
 
         return ans
 
@@ -96,7 +80,7 @@ class Calculator(tkinter.Frame):
         r += 1
         tkinter.Label(self.frame, text="dan").grid(row=r, column=1)
         tkinter.Label(self.frame, text="gacha").grid(row=r, column=2)
-        tkinter.Label(self.frame, text="qadam").grid(row=r, column=3)
+        tkinter.Label(self.frame, text="el.soni").grid(row=r, column=3)
         r += 1
         for key in self.v.keys():
             frm = tkinter.Frame(self.frame)
@@ -116,6 +100,7 @@ class Calculator(tkinter.Frame):
     def calc_button(self, event=None):
         import matplotlib.pyplot as plt
         from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+        import numpy as np
 
         tkinter.Label(self.parent, text=self.title).grid(row=0, column=6)
 
@@ -125,35 +110,49 @@ class Calculator(tkinter.Frame):
         line2.get_tk_widget().grid(row=1, column=6, rowspan=12,
                                    padx=10, pady=10, )  # sticky='nwse')
 
+
         # ax2.set_title('AlGaAs 2D')
-        ax2.set_xlabel('Magnit maydon (B)')
-        ax2.set_ylabel('Funksiyaning qiymati')
+        ax2.set_xlabel('d')
+        ax2.set_ylabel('E')
 
-        x = list(range(self.v['B'][0].get(), self.v['B'][1].get()+1, self.v['B'][2].get()))
-
-        for N in range(
-                self.v['N'][0].get(),
-                self.v['N'][1].get()+1,
-                self.v['N'][2].get(),
-                ):
+        # x = list(range(self.v['B'][0].get(), self.v['B'][1].get()+1, self.v['B'][2].get()))
+        x = np.linspace(self.v['d'][0].get(), self.v['d'][1].get(), self.v['d'][2].get())
+        Em = np.linspace(self.v['Em'][0].get(), self.v['Em'][1].get(), self.v['Em'][2].get())
+        # Em = [0.0, 0.01, 0.02, 0.03]
+        for q in Em:
 
             y = []
-            for B in x:
-                y.append(self.func(B, N))
+            for el in range(len(x)):
+                y.append(self.func(x[el], q))
+            # for d in x:
+            #     y.append(self.func(d, q))
 
-            ax2.plot(x, y, label=str(N))
+            ax2.plot(x, y, label=f"Em={q:1.4f}")
+            # print("x=", x)
+            # print(Em)
 
-        ax2.legend(loc='upper center', bbox_to_anchor=(0.5, 1.1),
-                   ncol=4, fancybox=True, shadow=True)
-        # print('CALC')
-
+        ax2.legend(loc='best', bbox_to_anchor=(0.5, 1.1),
+                   ncol=1, fancybox=True, shadow=True)
+        ax2.set_ylim([4e-5, 4e-2])
+        print('CALC')
+        """best
+        upper right
+        upper left
+        lower left
+        lower right
+        right
+        center left
+        center right
+        lower center
+        upper center
+        center"""
         pass
 
 
 if __name__ == '__main__':
     win = tkinter.Tk()
 
-    calc = Calculator(win, 'AlGaAs/GaAs/AlGaAs')
+    calc = Calculator(win, 'Si/Si(1-x)Ge(x)Si')
 
     win.mainloop()
 

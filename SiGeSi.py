@@ -1,19 +1,5 @@
 """
-AlGaAs/GaAs/AlGaAs
-
-restart; n:=1; m:=0.067*9.1e-31; e:=1.6e-19; pi:=3.14; h:=1.06e-34;
-d:=12e-9;
-
-E:=proc(B,N,d);
-h*B*(N+0.5)/m+pi^2*h^2*n^2/(2*m*e*d^2);
-end proc:
-
-plot3d([E(B,0,d), E(B,1),E(B,2),E(B,3),E(B,4)],
-B=0..20,
-d=2..12,
-numpoints=100,
-linestyle=[1,1,1,1,1],
-thickness=2, color=[blue,red,green,black,pink]);
+Si/Si(1-x)Ge(x)Si
 """
 
 import tkinter
@@ -43,16 +29,16 @@ class Calculator(tkinter.Frame):
 
         self.c = {              # CONSTANTS
             'n':  tkinter.IntVar(value=1),
-            'm':  tkinter.DoubleVar(value=6.097e-32),
+            'm':  tkinter.DoubleVar(value=9.828e-31),
             'e':  tkinter.DoubleVar(value=1.6e-19),
             'pi': tkinter.DoubleVar(value=pi),
             'h':  tkinter.DoubleVar(value=1.06e-34),
-            'd':  tkinter.DoubleVar(value=12e-9),
+            'd':  tkinter.DoubleVar(value=5e-9),
             # 'Eg': tkinter.DoubleVar(value=0.414),
         }
 
         self.v = {              # VARIABLES
-            'B':  (tkinter.IntVar(value=1), tkinter.IntVar(value=10), tkinter.IntVar(value=2)),
+            'B':  (tkinter.IntVar(value=0), tkinter.IntVar(value=10), tkinter.IntVar(value=2)),
             'N':  (tkinter.IntVar(value=0), tkinter.IntVar(value=4), tkinter.IntVar(value=1)),
             }
         self.grid(row=0, column=0)
@@ -64,14 +50,7 @@ class Calculator(tkinter.Frame):
         n, m, e, h, d = self.c['n'].get(), self.c['m'].get(), self.c['e'].get(), \
                         self.c['h'].get(), self.c['d'].get()
 
-        ans = h * B * (N + .5) / m + (self.c['pi'].get() * h * n)**2 / (2 * m * e * d**2)
-
-
-        # ans = (N + .5) * h * B / m + \
-        #       (self.c['pi'].get() * h * n)**2 / (2 * m * e * d**2)
-        # ans = self.c['Eg'].get()**2 * 4 * self.c['Eg'].get() * ans
-        #
-        # ans = ans**.5 * .5 - self.c['Eg'].get() / 2
+        ans = h * B * (N + .5) / m + (self.c['pi'].get() * h * n) ** 2 / (2 * m * e * d**2)
 
         return ans
 
@@ -153,7 +132,7 @@ class Calculator(tkinter.Frame):
 if __name__ == '__main__':
     win = tkinter.Tk()
 
-    calc = Calculator(win, 'AlGaAs/GaAs/AlGaAs')
+    calc = Calculator(win, 'Si/Si(1-x)Ge(x)Si')
 
     win.mainloop()
 

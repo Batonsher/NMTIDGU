@@ -32,7 +32,7 @@ class Calculator(tkinter.Frame):
     def __init__(self, parent=None, **kwargs):
         tkinter.Frame.__init__(self, parent, **kwargs)
 
-        self.frame = tkinter.Frame(parent, bg="green").pack(side=tkinter.LEFT)#, fill=tkinter.BOTH)
+        self.frame = tkinter.Frame(parent, bg="green").grid(row=0, column=0)#pack(side=tkinter.LEFT)#, fill=tkinter.BOTH)
 
         self.c = {              # CONSTANTS
             'pi': tkinter.DoubleVar(value=pi),
@@ -47,6 +47,7 @@ class Calculator(tkinter.Frame):
             'B':  tkinter.IntVar(value=1),
             'N':  tkinter.IntVar(value=2),
             'd':  tkinter.IntVar(value=3), }
+        self.grid(row=0, column=0)#pack(side=tkinter.LEFT, padx=10, pady=10, ipadx=20)
 
     def func(self, B, N, d):
         n, m, e, h, d = self.c['n'].get(), self.c['m'].get(), self.c['e'].get(), \
@@ -57,20 +58,23 @@ class Calculator(tkinter.Frame):
         return ans
 
     def gui(self):
-
-        tkinter.Label(self.frame, text="CONSTANTS").pack(side=tkinter.TOP)
+        tkinter.Label(self.frame, text="CONSTANTS").grid(row=0, column=0)#pack(side=tkinter.TOP)
+        r=1
         for key in self.c.keys():
             frm = tkinter.Frame(self.frame)
             tkinter.Label(frm, text=key, width=4).pack(side=tkinter.LEFT)
             DisabledEntry(frm, text=self.c[key].get()).pack(side=tkinter.RIGHT, fill=tkinter.X)
-            frm.pack(side=tkinter.TOP)
+            frm.grid(row=r, column=0)#pack(side=tkinter.TOP)
+            r+=1
 
-        tkinter.Label(self.frame, text="VARIABLES").pack(side=tkinter.TOP)
+        tkinter.Label(self.frame, text="VARIABLES").grid(row=r, column=0)#pack(side=tkinter.TOP)
+        r+=1
         for key in self.v.keys():
             frm = tkinter.Frame(self.frame)
             tkinter.Label(frm, text=key, width=4).pack(side=tkinter.LEFT)
             tkinter.Entry(frm, textvariable=self.v[key]).pack(side=tkinter.RIGHT, fill=tkinter.X)
-            frm.pack(side=tkinter.TOP)
+            frm.grid(row=r, column=0)#pack(side=tkinter.TOP)
+            r+=1
         pass
 
 

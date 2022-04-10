@@ -1,6 +1,6 @@
 from AlGaAs_2D import *
 import tkinter
-import matplotlib.pyplot as plt
+
 
 win = tkinter.Tk()
 
